@@ -204,7 +204,7 @@
 				vertical-align: -14px;
 			}
 
-			.child-mod > div.current-bk-color {
+			.child-mod > div.current-bg-color {
 				border: 2px solid #ff7800;
 			}
 			
@@ -240,7 +240,7 @@
 				position: fixed;
 				width: 100%;
 				height: 50%;
-				top: 20%;
+				top: 16%;
 				z-index: 999;
 			}
 
@@ -323,7 +323,7 @@
 					<div>
 						<div class="color-pannel" id="white"></div>
 					</div>
-					<div class="current-bk-color">
+					<div>
 						<div class="color-pannel" id="yellow"></div>
 					</div>
 					<div>
@@ -376,7 +376,9 @@
 					font_container: $('#font_container'),
 					font_style_span: $('#font_style span'),
 					larger_font: $('#larger-font'),
-					smaller_font: $('#smaller-font')
+					smaller_font: $('#smaller-font'),
+					day: $('#reading_model_sun'),
+					night: $('#reading_model_moon')
 				}
 				var Win = $(window);
 				var Doc = $(document);
@@ -388,6 +390,19 @@
 					initFontSize = 18;
 				}
 				mReadContent.css('font-size', initFontSize);
+
+				//获取背景颜色按钮节点
+				var bgColors = $('.child-mod div.color-pannel');
+				var currentBgColor = Util.StorageGetter('bg_color');
+				if (!currentBgColor) {
+					currentBgColor = bgColors[1].css('background-color');
+				}
+				mReadContent.css('background-color', currentBgColor);
+
+				//未实现
+				//获取背景颜色按钮节点的父节点（选中橙色边框）
+				var currentBgColorItem = Util.StorageGetter('bg_color_item');
+				// var currentBgColorItemId = '#' + currentBgColorItem;
 
 
 				function main() {
@@ -445,12 +460,44 @@
 					});
 					DOM.smaller_font.click(function() {
 						--initFontSize;
-						if (initFontSize < 12) {
+						if (initFontSize < 14) {
 							return;
 						};
 						mReadContent.css('font-size', initFontSize);
 						Util.StorageSetter('font_size', initFontSize);
 					});
+
+					for (var i = 0; i < bgColors.length ; i++) {
+						(function (index) {
+							bgColors[index].onclick = function(){
+								var currentBgColor = $(this).css('background-color');
+								mReadContent.css('background-color', currentBgColor);
+								$($(this).parent().siblings()).removeClass('current-bg-color');
+								$(this).parent().addClass('current-bg-color');
+								Util.StorageSetter('bg_color_item', $(this).attr('id'));
+								Util.StorageSetter('bg_color', currentBgColor);
+							};
+						})(i);
+					}
+
+					//白天/夜晚阅读模式转换
+					DOM.day.click(function() {
+						$(this).hide();
+						DOM.night.show();
+						mReadContent.css('font-size', initFontSize);
+						mReadContent.css('background-color', '#E9DFC7');
+						$('#dark').parent().removeClass('current-bg-color');
+						$('#yellow').parent().addClass('current-bg-color');
+					});
+					DOM.night.click(function() {
+						$(this).hide();
+						DOM.day.show();
+						mReadContent.css('font-size', initFontSize);
+						mReadContent.css('background-color', '#283548');
+						$('#yellow').parent().removeClass('current-bg-color');
+						$('#dark').parent().addClass('current-bg-color');
+					});
+
 				}
 
 				main();
@@ -459,3 +506,18 @@
 		</script>
 	</body>
 </html>
+<!-- #white {
+				background-color: #FFFFFF;
+			}
+			#yellow {
+				background-color: #E9DFC7;
+			}
+			#gray {
+				background-color: #A4A4A4;
+			}
+			#green {
+				background-color: #CDEFCE;
+			}
+			#dark {
+				background-color: #283548;
+			} -->
