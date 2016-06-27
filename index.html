@@ -189,6 +189,9 @@
 				border-radius: 16px;
 				padding: 6px 40px;
 			}
+			.child-mod button:active {
+				background: rgba(255,255,255, .4);
+			}
 			.child-mod button:last-child {
 				margin-left: 10px;
 			}
@@ -486,14 +489,16 @@
 						DOM.night.show();
 						mReadContent.css('font-size', initFontSize);
 						mReadContent.css('background-color', '#E9DFC7');
-						$('#dark').parent().removeClass('current-bg-color');
 						$('#yellow').parent().addClass('current-bg-color');
+						$('#yellow').parent().siblings().removeClass('current-bg-color');
+						$('#dark').parent().removeClass('current-bg-color');
 					});
 					DOM.night.click(function() {
 						$(this).hide();
 						DOM.day.show();
 						mReadContent.css('font-size', initFontSize);
 						mReadContent.css('background-color', '#283548');
+						$('#dark').parent().siblings().removeClass('current-bg-color');
 						$('#yellow').parent().removeClass('current-bg-color');
 						$('#dark').parent().addClass('current-bg-color');
 					});
@@ -506,18 +511,3 @@
 		</script>
 	</body>
 </html>
-<!-- #white {
-				background-color: #FFFFFF;
-			}
-			#yellow {
-				background-color: #E9DFC7;
-			}
-			#gray {
-				background-color: #A4A4A4;
-			}
-			#green {
-				background-color: #CDEFCE;
-			}
-			#dark {
-				background-color: #283548;
-			} -->
